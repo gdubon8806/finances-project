@@ -1,0 +1,42 @@
+<!-- Project created  19/10/2024 
+    The idea is to create a web app to keep track of in which things i spend the most
+    and to have a centralized place to record finances
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>FINANCES</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>My finances</h1>
+    </header>
+
+    <div class="modal-container">
+        <div class="add-entry-modal">
+            <h2>Add entry</h2>
+            <label for="entry-txt">Add new entry:</label>
+            <input type="text" name="desc-entry-txt" class="desc-entry-txt" required>
+            <input type="date" name="date-entry-txt" class="date-entry-txt" required>
+            <input type="number" name="amt-entry-txt" class="amt-entry-txt" required>
+            <button class="add-entry-btn">Add</button>
+        </div>
+    </div>
+
+    <div class="container-table-entries">
+        <table class="table-entries">
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </table>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+
+</html>
