@@ -1,16 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:wght@100&display=swap');
+/*GLOBALS*/
 * {
     box-sizing: border-box;
-    font-size: 1.2rem;
 }
 
-.modal-container {
+:root {
+    font-size: 1em;
+    font-family: "Roboto Slab", serif;
+
+    --bck-color-primary: rgb(235, 235, 235)
+}
+
+input {
+    font-family: "Roboto Slab", serif;
+}
+
+
+/*RESPONSIVENESS*/
+@media (max-width: 1200px) {
+    :root {
+        font-size: 2.5em; /* Ajusta el tamaño de la fuente para dispositivos móviles */
+    }
+    input {
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+    }
+    button {
+        font-size: 1rem;
+    }
+
+}
+
+/*BUTTONS*/
+button {
+    border: var(--bck-color-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: black;
+}
+
+/*MODALS*/
+.add-entry-modal-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     /* border: green thin solid; */
-    padding: 1rem;
+    padding: 2rem;
     display: flex;
     vertical-align: center;
     justify-content: center;
@@ -18,8 +56,44 @@
 }
 
 .add-entry-modal {
+    width:  100%;
+    font-size: 1.2em;
     padding: 1rem;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 20px;
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.25);
 }
+
+/*ADD ENTRY STUFF*/
+.add-entry-controls > * {
+    margin-top: 0.5rem
+}
+
+/*TABLE ENTRIES*/
+.table-entries {
+    text-align: center;
+    width: 100%;
+    border-collapse: collapse;
+    /* border: red thin solid; */
+}
+.table-entries th {
+    /* color: rgb(64, 64, 64); */
+    background-color: var(--bck-color-primary);
+}
+.table-entries td {
+    background-color:  rgb(250, 250, 250) ;
+}
+
+.table-entries tr {
+    /* border: none; */
+}
+
+/*CLASSES UTILS*/ 
+.flex {
+    display: grid;
+    grid-template-columns: 2;
+}
+.hide {
+    display: none;
+}
+

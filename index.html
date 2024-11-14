@@ -15,14 +15,28 @@
         <h1>My finances</h1>
     </header>
 
-    <div class="modal-container">
+    <button class="show-add-entry-modal-btn">Add</button>
+    <br>
+    <br> <!-- Con fines de desarrollo este BR -->
+
+    <div class="add-entry-modal-container hide">
         <div class="add-entry-modal">
             <h2>Add entry</h2>
-            <label for="entry-txt">Add new entry:</label>
-            <input type="text" name="desc-entry-txt" class="desc-entry-txt" required>
-            <input type="date" name="date-entry-txt" class="date-entry-txt" required>
-            <input type="number" name="amt-entry-txt" class="amt-entry-txt" required>
-            <button class="add-entry-btn">Add</button>
+            <div class="flex add-entry-controls">
+                <label for="entry-txt">Description:</label>
+                <input type="text" name="desc-entry-txt" class="desc-entry-txt" placeholder="Description..." required>
+                <label for="date-entry-txt">Date:</label>
+                <input type="date" name="date-entry-txt" class="date-entry-txt" placeholder="Date..." required>
+                <label for="amt-entry-txt">Amount:</label>
+                <input type="number" name="amt-entry-txt" class="amt-entry-txt" placeholder="Amount..." required>
+
+                <div>
+                    <button class="add-entry-btn">Add</button>
+                    <button class="close-modal-btn">Close</button>
+                </div>
+            </div>
+
+
         </div>
     </div>
 

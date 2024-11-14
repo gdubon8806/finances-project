@@ -1,5 +1,8 @@
 //add entry form controls
+const SHOW_ADD_ENTRY_MODAL_BTN = document.querySelector('.show-add-entry-modal-btn');
 const ADD_ENTRY_BTN = document.querySelector('.add-entry-btn');
+const CLOSE_MODAL_BTN = document.querySelector('.close-modal-btn');
+const ADD_ENTRY_MODAL_CONTAINER = document.querySelector('.add-entry-modal-container');
 
 //inputs 
 const DATE_ENTRY_TXT = document.querySelector('.date-entry-txt');
@@ -18,6 +21,18 @@ const ENTRIES = [];
 ADD_ENTRY_BTN.addEventListener('click', () => {
     addNewEntry();
 })
+
+SHOW_ADD_ENTRY_MODAL_BTN.addEventListener('click', () => {
+    toggleModalEntry();
+})
+
+CLOSE_MODAL_BTN.addEventListener('click', () => {
+    toggleModalEntry();
+})
+
+function toggleModalEntry() {
+    ADD_ENTRY_MODAL_CONTAINER.classList.toggle('hide');
+}
 
 function addNewEntry() {
     ENTRIES.push(createNewEntry()); //updates state
