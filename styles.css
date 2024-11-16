@@ -5,31 +5,44 @@
 }
 
 :root {
-    font-size: 1em;
     font-family: "Roboto Slab", serif;
-
-    --bck-color-primary: rgb(235, 235, 235)
+    --bck-color-primary: rgb(235, 235, 235);
+    --bck-color-secundary: rgb(240, 240, 240)
 }
 
 input {
     font-family: "Roboto Slab", serif;
+    border: none;
+    background-color: var(--bck-color-secundary);
+    padding: 0.25rem;
+
+}
+
+select {
+    border: none;
+    padding: 0.25rem;
+    background-color: var(--bck-color-secundary);
 }
 
 
 /*RESPONSIVENESS*/
 @media (max-width: 1200px) {
-    :root {
-        font-size: 2.5em; /* Ajusta el tamaño de la fuente para dispositivos móviles */
-    }
-    input {
+    input, select {
         padding: 0.25rem;
         border-radius: 0.25rem;
         font-size: 1rem;
     }
+
+    .add-entry-modal {
+        width: 100%;
+    }
+    .add-entry-modal-container {
+        padding: 0;
+    }
+
     button {
         font-size: 1rem;
     }
-
 }
 
 /*BUTTONS*/
@@ -48,7 +61,7 @@ button {
     width: 100vw;
     height: 100vh;
     /* border: green thin solid; */
-    padding: 2rem;
+    /* padding: 2rem; */
     display: flex;
     vertical-align: center;
     justify-content: center;
@@ -56,6 +69,7 @@ button {
 }
 
 .add-entry-modal {
+    margin-top: 1rem;
     width:  100%;
     font-size: 1.2em;
     padding: 1rem;
@@ -71,22 +85,35 @@ button {
 
 /*TABLE ENTRIES*/
 .table-entries {
-    text-align: center;
     width: 100%;
     border-collapse: collapse;
-    /* border: red thin solid; */
 }
 .table-entries th {
     /* color: rgb(64, 64, 64); */
     background-color: var(--bck-color-primary);
 }
 .table-entries td {
-    background-color:  rgb(250, 250, 250) ;
+    /*background-color:  rgb(250, 250, 250) ; */
+    border: gray thin solid;
 }
 
 .table-entries tr {
     /* border: none; */
 }
+
+
+/*DAY TEMPLATE*/
+.header-s {
+    margin: 0;
+}
+.header-i {
+    margin: 0;
+}
+.date-header  {
+/* margin-top: 1.5rem; */
+margin-bottom: 0;
+}
+
 
 /*CLASSES UTILS*/ 
 .flex {
