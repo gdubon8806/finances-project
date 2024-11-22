@@ -18,6 +18,10 @@ input {
 
 }
 
+button:hover, tr:hover {
+    cursor: pointer;
+}
+
 select {
     border: none;
     padding: 0.25rem;
@@ -122,5 +126,9 @@ margin-bottom: 0;
 }
 .hide {
     display: none;
+}
+
+.rowSelected {
+    background-color: yellow;
 }
 

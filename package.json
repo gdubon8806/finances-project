@@ -1,0 +1,30 @@
+{
+  "name": "my_finances_project",
+  "version": "1.0.0",
+  "description": "This is a project created by German Dubon developed to help to keep track of finances and budgets.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdubon8806/finances-project.git"
+  },
+  "keywords": [
+    "budget",
+    "spendings",
+    "spend",
+    "income",
+    "entries",
+    "money"
+  ],
+  "author": "German Dubon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gdubon8806/finances-project/issues"
+  },
+  "homepage": "https://github.com/gdubon8806/finances-project#readme",
+  "dependencies": {
+    "firebase": "^11.0.2"
+  }
+}

@@ -1,8 +1,10 @@
-//add entry form controls
+import { readEntry, createEntry, deleteEntry } from './firebase.js';
+// entry controls
 const SHOW_ADD_ENTRY_MODAL_BTN = document.querySelector('.show-add-entry-modal-btn');
 const ADD_ENTRY_BTN = document.querySelector('.add-entry-btn');
 const CLOSE_MODAL_BTN = document.querySelector('.close-modal-btn');
 const ADD_ENTRY_MODAL_CONTAINER = document.querySelector('.add-entry-modal-container');
+const DELETE_ENTRY_BTN = document.querySelector('.delete-entry-btn');
 
 //inputs 
 const DATE_ENTRY_TXT = document.querySelector('.date-entry-txt');
@@ -12,16 +14,58 @@ const TYPE_ENTRY_SELECT = document.querySelector('.type-entry-select');
 
 
 //UI elements
-const TABLE_ENTRIES = document.querySelector('.table-entries');
+// const TABLE_ENTRIES = document.querySelector('.table-entries');
+const ENTRIES_CONTAINER = document.querySelector('.entries-container');
 
 //State
-const ENTRIES = [];
-
+let ENTRIES = [];
 
 //event listeners
+//add entry
 ADD_ENTRY_BTN.addEventListener('click', () => {
-    addNewEntry();
+    //send data to DB 
+    createEntry(getDataNewEntry()).then(() => {
+        //update state and UI   
+        initializeEntries();
+    });
 })
+
+//delete entry
+DELETE_ENTRY_BTN.addEventListener('click', () => {
+    //sends to db
+    deleteEntry(idCurrentRowSelected).then(() => {
+        //update state and UI
+        initializeEntries();
+    });
+    DELETE_ENTRY_BTN.disabled = true;
+    idCurrentRowSelected = '';
+})
+
+
+//for clic handler over rows to select them in entries container
+let idCurrentRowSelected = '';
+ENTRIES_CONTAINER.addEventListener('click', (e) => {
+    // Buscar la fila más cercana al elemento clicado
+    const rowSelected = e.target.closest('tr');
+    if (!rowSelected || !rowSelected.hasAttribute('id')) {
+        return; // Si no es una fila válida o no tiene `id`, salir
+    }
+    //obtener id
+    const idEntry = rowSelected.getAttribute('id');
+    // si ya hay un id actual seleccionado no puede haber otro seleccionado
+    if(idCurrentRowSelected !== '' &&  idCurrentRowSelected !== idEntry) {
+        return;
+    } else if(idCurrentRowSelected !== '' &&  idCurrentRowSelected == idEntry) {
+        rowSelected.classList.toggle("rowSelected");
+        DELETE_ENTRY_BTN.disabled = true;
+        idCurrentRowSelected = '';
+    } else if(idCurrentRowSelected == '') {
+        idCurrentRowSelected = idEntry;
+        rowSelected.classList.toggle("rowSelected");
+        DELETE_ENTRY_BTN.disabled = false;
+    }
+});
+
 
 SHOW_ADD_ENTRY_MODAL_BTN.addEventListener('click', () => {
     toggleModalEntry();
@@ -31,32 +75,43 @@ CLOSE_MODAL_BTN.addEventListener('click', () => {
     toggleModalEntry();
 })
 
+
 function toggleModalEntry() {
     ADD_ENTRY_MODAL_CONTAINER.classList.toggle('hide');
 }
 
-function addNewEntry() {
-    ENTRIES.push(createNewEntry()); //updates state
-
-    renderTableEntries(); //updates UI
-}
-
-function createNewEntry() {
+function getDataNewEntry() {
     //first get current input data
+
     let tempDATE_ENTRY_TXT = DATE_ENTRY_TXT.value;
     let tempDESC_ENTRY_TXT = DESC_ENTRY_TXT.value;
     let tempAMT_ENTRY_TXT = AMT_ENTRY_TXT.value;
     let tempTYPE_ENTRY_SELECT = TYPE_ENTRY_SELECT.value;
 
-    const newEntry = new Entry(tempDATE_ENTRY_TXT, tempDESC_ENTRY_TXT, tempAMT_ENTRY_TXT, tempTYPE_ENTRY_SELECT);
+    const newEntry = new Entry(
+        tempDATE_ENTRY_TXT,
+        tempDESC_ENTRY_TXT,
+        tempAMT_ENTRY_TXT,
+        tempTYPE_ENTRY_SELECT);
 
     return newEntry;
 }
 
-const ENTRIES_CONTAINER = document.querySelector('.entries-container')
+function initializeEntries() {
+    //get data
+    ENTRIES = []; //restarts entries state arr
+    readEntry().then((entries) => {
+        entries.forEach((entry) => {
+            ENTRIES.push(entry);
+        })
+        //update ui with data obtanied
+        renderTableEntries();
+    });
+
+}
 
 function renderTableEntries() {
-    ENTRIES_CONTAINER.innerHTML = ""; //restarts entries container
+    ENTRIES_CONTAINER.innerHTML = ""; //restarts entries container UI
 
     let copy_entries = ENTRIES.slice(); //copy of array entries 
 
@@ -97,6 +152,7 @@ function renderTableEntries() {
         if (spendingsDateEntries.length > 0) {
             for (let i = 0; i < spendingsDateEntries.length; i++) {
                 let rowEntry = document.createElement('tr');
+                rowEntry.id = spendingsDateEntries[i].id;
                 let tableDataDesc = document.createElement('td');
                 let tableDataAmt = document.createElement('td');
 
@@ -116,7 +172,7 @@ function renderTableEntries() {
         }
 
         //iterar sobre entries para ingresos
-        //solo spendings
+        //solo deposits
         let depositsDateEntries = dateEntries.filter((entry) => {
             if (entry.type == "Deposit") return true;
         })
@@ -125,6 +181,7 @@ function renderTableEntries() {
 
             for (let i = 0; i < depositsDateEntries.length; i++) {
                 let rowEntry = document.createElement('tr');
+                rowEntry.id = depositsDateEntries[i].id;
                 let tableDataDesc = document.createElement('td');
                 let tableDataAmt = document.createElement('td');
 
@@ -157,3 +214,5 @@ class Entry {
         this.type = type
     }
 }
+
+initializeEntries();
