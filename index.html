@@ -14,30 +14,32 @@
 <body>
     <header>
         <h1>My finances</h1>
+        <button class="show-add-entry-modal-btn">+ Agregar Entrada</button>
+        <button class="delete-entry-btn" disabled >- Eliminar Entrada</button>
     </header>
-    <button class="show-add-entry-modal-btn">+ Add entry</button>
-    <button class="delete-entry-btn" disabled >- Delete Entry</button>
-    <br>
+
+    <!-- <button class="update-entry-btn" disabled >Actualizar Entrada</button>  -->
+    <br><br>
     <br> <!-- Con fines de desarrollo este BR -->
 
     <div class="add-entry-modal-container hide">
         <div class="add-entry-modal">
-            <h2>Add entry</h2>
+            <h2>Agregar Entrada</h2>
             <div class="flex add-entry-controls">
-                <label for="entry-txt">Description:</label>
+                <label for="entry-txt">Descripción:</label>
                 <input type="text" name="desc-entry-txt" class="desc-entry-txt" placeholder="Description..." required>
-                <label for="date-entry-txt">Date:</label>
+                <label for="date-entry-txt">Fecha:</label>
                 <input type="date" name="date-entry-txt" class="date-entry-txt" placeholder="Date..." required>
-                <label for="amt-entry-txt">Amount:</label>
+                <label for="amt-entry-txt">Cantidad:</label>
                 <input type="number" name="amt-entry-txt" class="amt-entry-txt" placeholder="Amount..." required>
-                <label for="amt-entry-txt">Type:</label>
+                <label for="amt-entry-txt">Tipo:</label>
                 <select class="type-entry-select" name="type-entry-select">
-                    <option value="Deposit">Deposit</option>
-                    <option value="Withdrawal">Withdrawal</option>
+                    <option value="Deposit">Depósito</option>
+                    <option value="Withdrawal">Retiro</option>
                 </select>
                 <div>
-                    <button class="add-entry-btn">Add</button>
-                    <button class="close-modal-btn">Close</button>
+                    <button class="add-entry-btn">Agregar</button>
+                    <button class="close-modal-btn">Cerrar</button>
                 </div>
             </div>
 
@@ -55,6 +57,26 @@
         </table>
         <h3 class="header-i">Ingresos</h3>
         <table class="income-table-entries table-entries">
+        </table>
+    </template>
+    
+    <template class="summary-date-template">
+        <h3 class="header-s">Resumen de fecha</h3>
+        <table class="summary-date-table">
+            <tr>
+                <th class="current-total-funds-spendings"></th>
+                <th>-</th>
+                <th class="total-spendings"></th> 
+                <th>=</th>
+                <th class="new-total-funds-after-spendings"></th>
+            </tr>
+            <tr>
+                <th class="current-total-funds-income"></th>
+                <th>+</th>
+                <th class="total-income"></th> 
+                <th>=</th>
+                <th class="new-total-funds-after-income"></th>
+            </tr>
         </table>
     </template>
 

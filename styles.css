@@ -17,6 +17,9 @@ input {
     padding: 0.25rem;
 
 }
+button {
+    margin: 0.25rem;
+}
 
 button:hover, tr:hover {
     cursor: pointer;
@@ -47,6 +50,19 @@ select {
     button {
         font-size: 1rem;
     }
+}
+/*Header*/
+header {
+    padding: 0.5rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    /* backdrop-filter: blur(10px); */
+}
+header h1 {
+    margin: 0px auto;
 }
 
 /*BUTTONS*/
@@ -91,6 +107,7 @@ button {
 .table-entries {
     width: 100%;
     border-collapse: collapse;
+    text-wrap: wrap;
 }
 .table-entries th {
     /* color: rgb(64, 64, 64); */
@@ -98,13 +115,25 @@ button {
 }
 .table-entries td {
     /*background-color:  rgb(250, 250, 250) ; */
-    border: gray thin solid;
+    /* border: gray thin solid; */
+    padding: 0.5rem;
+    border: none;
+    border-bottom: gray thin solid;
 }
 
 .table-entries tr {
     /* border: none; */
 }
 
+/*Summary of date template*/
+.summary-date-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.summary-date-table td {
+    /*background-color:  rgb(250, 250, 250) ; */
+    border: gray thin solid;
+}
 
 /*DAY TEMPLATE*/
 .header-s {
@@ -129,6 +158,7 @@ margin-bottom: 0;
 }
 
 .rowSelected {
-    background-color: yellow;
+    transition: all 0.5s;
+    background-color: rgb(255, 255, 155);
 }
 

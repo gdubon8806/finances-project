@@ -2,7 +2,7 @@
 // import { initializeApp } from "firebase/app";
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js'
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { collection, getDocs, addDoc, deleteDoc,doc} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { collection, getDocs, addDoc, deleteDoc, updateDoc, doc} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -55,11 +55,17 @@ export async function readEntry() {
     return entries; 
 }
 
-function updateEntry() {
-
+export async function updateEntry(id, newData) {
+    await updateDoc(id, {
+        amount: newData.amount,
+        date: newData.date,
+        description: newData.description,
+        type: newData.type
+    })
+    console.log("Entry was updated succesfully!");
 }
 
 export async function deleteEntry(id) {
     await deleteDoc(doc(db, "entries", id));
-    console.log("Entry eliminada exitosamente")
+    console.log("Entry deleted successfully!")
 }

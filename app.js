@@ -1,10 +1,11 @@
-import { readEntry, createEntry, deleteEntry } from './firebase.js';
+import { readEntry, createEntry, deleteEntry, updateEntry} from './firebase.js';
 // entry controls
 const SHOW_ADD_ENTRY_MODAL_BTN = document.querySelector('.show-add-entry-modal-btn');
 const ADD_ENTRY_BTN = document.querySelector('.add-entry-btn');
-const CLOSE_MODAL_BTN = document.querySelector('.close-modal-btn');
-const ADD_ENTRY_MODAL_CONTAINER = document.querySelector('.add-entry-modal-container');
+// const UPDATE_ENTRY_BTN = document.querySelector('.update-entry-btn');
 const DELETE_ENTRY_BTN = document.querySelector('.delete-entry-btn');
+
+const CLOSE_MODAL_BTN = document.querySelector('.close-modal-btn');
 
 //inputs 
 const DATE_ENTRY_TXT = document.querySelector('.date-entry-txt');
@@ -15,10 +16,14 @@ const TYPE_ENTRY_SELECT = document.querySelector('.type-entry-select');
 
 //UI elements
 // const TABLE_ENTRIES = document.querySelector('.table-entries');
+const ADD_ENTRY_MODAL_CONTAINER = document.querySelector('.add-entry-modal-container');
 const ENTRIES_CONTAINER = document.querySelector('.entries-container');
 
 //State
 let ENTRIES = [];
+// let totalFunds, totalSpendings, totalEarnings, shouldHave, difference;
+let initialFunds = 1000.00;
+let currentFunds = initialFunds;
 
 //event listeners
 //add entry
@@ -30,6 +35,17 @@ ADD_ENTRY_BTN.addEventListener('click', () => {
     });
 })
 
+//update entry // para despues
+// UPDATE_ENTRY_BTN.addEventListener('click', () => {
+    //show addData modal populated with the current data of the selected entry
+    // updateEntry(idCurrentRowSelected, ).then(() => {
+    //     initializeEntries();
+    // });
+        // UPDATE_ENTRY_BTN.disabled = true;
+        // DELETE_ENTRY_BTN.disabled = true;
+        // idCurrentRowSelected = '';
+// })
+
 //delete entry
 DELETE_ENTRY_BTN.addEventListener('click', () => {
     //sends to db
@@ -37,6 +53,7 @@ DELETE_ENTRY_BTN.addEventListener('click', () => {
         //update state and UI
         initializeEntries();
     });
+    // UPDATE_ENTRY_BTN.disabled = true;
     DELETE_ENTRY_BTN.disabled = true;
     idCurrentRowSelected = '';
 })
@@ -58,11 +75,13 @@ ENTRIES_CONTAINER.addEventListener('click', (e) => {
     } else if(idCurrentRowSelected !== '' &&  idCurrentRowSelected == idEntry) {
         rowSelected.classList.toggle("rowSelected");
         DELETE_ENTRY_BTN.disabled = true;
+        // UPDATE_ENTRY_BTN.disabled = true;
         idCurrentRowSelected = '';
     } else if(idCurrentRowSelected == '') {
         idCurrentRowSelected = idEntry;
         rowSelected.classList.toggle("rowSelected");
         DELETE_ENTRY_BTN.disabled = false;
+        // UPDATE_ENTRY_BTN.disabled = false;
     }
 });
 
@@ -84,6 +103,13 @@ function getDataNewEntry() {
     //first get current input data
 
     let tempDATE_ENTRY_TXT = DATE_ENTRY_TXT.value;
+    // console.log(tempDATE_ENTRY_TXT);
+    if(tempDATE_ENTRY_TXT == '') {
+        tempDATE_ENTRY_TXT =  new Date();
+        tempDATE_ENTRY_TXT = tempDATE_ENTRY_TXT.toISOString().split('T')[0];
+        console.log(tempDATE_ENTRY_TXT);
+    }
+    console.log(tempDATE_ENTRY_TXT);
     let tempDESC_ENTRY_TXT = DESC_ENTRY_TXT.value;
     let tempAMT_ENTRY_TXT = AMT_ENTRY_TXT.value;
     let tempTYPE_ENTRY_SELECT = TYPE_ENTRY_SELECT.value;
@@ -108,18 +134,20 @@ function initializeEntries() {
         renderTableEntries();
     });
 
+    currentFunds = initialFunds;
 }
 
 function renderTableEntries() {
     ENTRIES_CONTAINER.innerHTML = ""; //restarts entries container UI
 
     let copy_entries = ENTRIES.slice(); //copy of array entries 
-
+    copy_entries.sort((a, b) => new Date(a.date) - new Date(b.date));
     //grouped by date entries 
     const entries_grouped_by_dates = Object.groupBy(copy_entries, ({ date }) => date);
-
     //iterate over this object and render data in table with template
+    
     for (let entryDate in entries_grouped_by_dates) {
+        let totalIncome = 0, totalSpendings = 0;
         let template = document.querySelector(".day-entries-template");
         let content = template.content.cloneNode(true);
 
@@ -143,7 +171,6 @@ function renderTableEntries() {
         //iterar sobre entries para egresos
         let dateEntries = entries_grouped_by_dates[entryDate];
 
-
         //solo spendings
         let spendingsDateEntries = dateEntries.filter((entry) => {
             if (entry.type == "Withdrawal") return true;
@@ -159,15 +186,22 @@ function renderTableEntries() {
                 tableDataDesc.innerHTML = spendingsDateEntries[i].description;
                 tableDataAmt.innerHTML = 'L. ' + spendingsDateEntries[i].amount;
 
+                tableDataAmt.style.minWidth = "150px";
+                tableDataDesc.style.paddingLeft = '0px';
+
                 rowEntry.appendChild(tableDataDesc);
                 rowEntry.appendChild(tableDataAmt);
 
                 content.querySelector(".spending-table-entries").append(rowEntry);
+                
+                totalSpendings += parseFloat(spendingsDateEntries[i].amount);
             }
 
         } else {
             let rowEntry = document.createElement('tr');
-            rowEntry.innerHTML = "No hay entries"
+            let tableDataEntry = document.createElement('td');
+            tableDataEntry.innerHTML = "No hay entradas.";
+            rowEntry.append(tableDataEntry);
             content.querySelector(".spending-table-entries").append(rowEntry);
         }
 
@@ -192,15 +226,44 @@ function renderTableEntries() {
                 rowEntry.appendChild(tableDataAmt);
 
                 content.querySelector(".income-table-entries").append(rowEntry);
+                totalIncome += parseFloat(depositsDateEntries[i].amount);
             }
         } else {
             let rowEntry = document.createElement('tr');
-            rowEntry.innerHTML = "No hay entries"
+            let tableDataEntry = document.createElement('td');
+            tableDataEntry.innerHTML = "No hay entradas.";
+            rowEntry.style.textAlign = "center";
+            rowEntry.append(tableDataEntry);
             content.querySelector(".income-table-entries").append(rowEntry);
         }
 
 
         document.querySelector(".entries-container").append(content);
+
+        //create summary of date of entries
+        let templateSummary = document.querySelector(".summary-date-template");
+        let contentSummary = templateSummary.content.cloneNode(true);
+        contentSummary.querySelector(".current-total-funds-spendings").innerHTML="L. " + currentFunds.toFixed(2);
+        contentSummary.querySelector(".total-spendings").innerHTML ="L. " + totalSpendings.toFixed(2);
+        
+        //calculate first substracting the spendings
+        let newTotalFunds = parseFloat(currentFunds) - parseFloat(totalSpendings);
+
+        contentSummary.querySelector(".new-total-funds-after-spendings").innerHTML = "L. " + newTotalFunds.toFixed(2); 
+        
+        currentFunds = newTotalFunds;
+  
+        contentSummary.querySelector(".current-total-funds-income").innerHTML ="L. " + currentFunds.toFixed(2);
+        contentSummary.querySelector(".total-income").innerHTML ="L. " + totalIncome.toFixed(2);
+        
+        //calculate later adding the income
+        newTotalFunds = parseFloat(currentFunds) + parseFloat(totalIncome);
+        contentSummary.querySelector(".new-total-funds-after-income").innerHTML = "L. " + newTotalFunds.toFixed(2);        
+        
+        currentFunds = newTotalFunds;
+
+        document.querySelector(".entries-container").append(contentSummary);
+
     }
 
 }
