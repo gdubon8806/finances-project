@@ -15,7 +15,8 @@
     <header>
         <h1>My finances</h1>
         <button class="show-add-entry-modal-btn">+ Agregar Entrada</button>
-        <button class="delete-entry-btn" disabled >- Eliminar Entrada</button>
+        <button class="delete-entry-btn" disabled>- Eliminar Entrada</button>
+        <button class="show-add-budget-modal-btn">+ Agregar presupuesto</button>
     </header>
 
     <!-- <button class="update-entry-btn" disabled >Actualizar Entrada</button>  -->
@@ -37,6 +38,9 @@
                     <option value="Deposit">Depósito</option>
                     <option value="Withdrawal">Retiro</option>
                 </select>
+                <label for="cat-entry-select">Categoría:</label>
+                <select class="cat-entry-select" name="cat-entry-select">
+                </select>
                 <div>
                     <button class="add-entry-btn">Agregar</button>
                     <button class="close-modal-btn">Cerrar</button>
@@ -46,6 +50,32 @@
 
         </div>
     </div>
+
+    <div class="add-budget-modal-container hide">
+        <div class="add-budget-modal">
+            <h2>Agregar Presupuesto</h2>
+            <div class="flex add-budget-controls">
+                <label for="budget-name-txt">Nombre:</label>
+                <input type="text" name="budget-name-txt" class="budget-name-txt" placeholder="Nombre..." required>
+                <label for="budget-amt-txt">Cantidad:</label>
+                <input type="number" name="budget-amt-txt" class="budget-amt-txt" placeholder="Cantidad..." required>
+                <!-- <label for="amt-entry-txt">Tipo:</label>
+                <select class="type-entry-select" name="type-entry-select">
+                    <option value="Deposit">Depósito</option>
+                    <option value="Withdrawal">Retiro</option>
+                </select> -->
+                <div>
+                    <button class="add-budget-btn">Agregar</button>
+                    <button class="close-budget-modal-btn">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="budgets-container">
+
+    </div>
+
     <div class="entries-container">
 
     </div>
@@ -59,26 +89,35 @@
         <table class="income-table-entries table-entries">
         </table>
     </template>
-    
+
     <template class="summary-date-template">
         <h3 class="header-s">Resumen de fecha</h3>
         <table class="summary-date-table">
             <tr>
                 <th class="current-total-funds-spendings"></th>
                 <th>-</th>
-                <th class="total-spendings"></th> 
+                <th class="total-spendings"></th>
                 <th>=</th>
                 <th class="new-total-funds-after-spendings"></th>
             </tr>
             <tr>
                 <th class="current-total-funds-income"></th>
                 <th>+</th>
-                <th class="total-income"></th> 
+                <th class="total-income"></th>
                 <th>=</th>
                 <th class="new-total-funds-after-income"></th>
             </tr>
         </table>
     </template>
+
+    <template class="budget-template">
+        <div class="budget-container">
+            <h2 class="name-budget"></h2>
+            <h3 class="amt-budget"></h3>
+            <canvas class="budget-graphic"></canvas>
+        </div>
+    </template>
+
 
     <script type="module" src="app.js" defer></script>
 </body>

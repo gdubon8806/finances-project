@@ -29,7 +29,8 @@ export async function createEntry(data) {
           description: data.description,
           date: data.date,
           amount: data.amount,
-          type: data.type
+          type: data.type,
+          category: data.category
         });
         console.log("Entry written with ID: ", docRef.id);
       } catch (e) {
@@ -47,7 +48,8 @@ export async function readEntry() {
             description: doc.data().description,
             date: doc.data().date,
             amount: doc.data().amount,
-            type: doc.data().type
+            type: doc.data().type,
+            category: doc.data().category
         }
         entries.push(entry);
     })
@@ -55,17 +57,45 @@ export async function readEntry() {
     return entries; 
 }
 
-export async function updateEntry(id, newData) {
-    await updateDoc(id, {
-        amount: newData.amount,
-        date: newData.date,
-        description: newData.description,
-        type: newData.type
-    })
-    console.log("Entry was updated succesfully!");
-}
+// export async function updateEntry(id, newData) {
+//     await updateDoc(id, {
+//         amount: newData.amount,
+//         date: newData.date,
+//         description: newData.description,
+//         type: newData.type
+//     })
+//     console.log("Entry was updated succesfully!");
+// }
 
 export async function deleteEntry(id) {
     await deleteDoc(doc(db, "entries", id));
     console.log("Entry deleted successfully!")
+}
+
+export async function readBudget() {
+    const  budgets = [];
+    const querySnapshot  = await getDocs(collection(db, "budgets"));
+    
+    querySnapshot.forEach((doc) => {
+        const budget = {
+            id: doc.id,
+            name: doc.data().name,
+            amount: doc.data().amount,
+        }
+        budgets.push(budget);
+    })
+
+    return budgets;
+}
+
+export async function createBudget(data) {
+    try {
+        const docRef = await addDoc(collection(db, "budgets"), {
+          name: data.name,
+          amount: data.amount,
+        });
+        console.log("Budget written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding budget: ", e);
+      }
 }

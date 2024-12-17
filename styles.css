@@ -74,7 +74,8 @@ button {
 }
 
 /*MODALS*/
-.add-entry-modal-container {
+.add-entry-modal-container, 
+.add-budget-modal-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -88,7 +89,8 @@ button {
     background-color: rgba(0, 0, 0, 0.528);
 }
 
-.add-entry-modal {
+
+.add-entry-modal, .add-budget-modal {
     margin-top: 1rem;
     width:  100%;
     font-size: 1.2em;
@@ -99,7 +101,7 @@ button {
 }
 
 /*ADD ENTRY STUFF*/
-.add-entry-controls > * {
+.add-entry-controls > *, .add-budget-controls > * {
     margin-top: 0.5rem
 }
 
@@ -162,3 +164,18 @@ margin-bottom: 0;
     background-color: rgb(255, 255, 155);
 }
 
+/*BUDGET CONTAINER*/
+.budgets-container {
+    margin-top: 2rem;
+    border: red thin solid;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.budget-container {
+    border: gray thin solid;
+    width: 10rem;
+    
+}
