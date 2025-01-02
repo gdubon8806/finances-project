@@ -72,6 +72,11 @@ export async function deleteEntry(id) {
     console.log("Entry deleted successfully!")
 }
 
+export async function deleteBudget(id) {
+  await deleteDoc(doc(db, "budgets", id));
+  console.log("Budget deleted successfully!")
+}
+
 export async function readBudget() {
     const  budgets = [];
     const querySnapshot  = await getDocs(collection(db, "budgets"));

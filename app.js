@@ -1,18 +1,17 @@
 import { readEntry, createEntry, deleteEntry } from './firebase.js';
-import { readBudget, createBudget } from './firebase.js';
+import { readBudget, createBudget, deleteBudget } from './firebase.js';
 // entry controls
 const SHOW_ADD_ENTRY_MODAL_BTN = document.querySelector('.show-add-entry-modal-btn');
 const ADD_ENTRY_BTN = document.querySelector('.add-entry-btn');
 // const UPDATE_ENTRY_BTN = document.querySelector('.update-entry-btn');
 const DELETE_ENTRY_BTN = document.querySelector('.delete-entry-btn');
-
 const CLOSE_MODAL_BTN = document.querySelector('.close-modal-btn');
 
 
 const ADD_BUDGET_BTN = document.querySelector('.add-budget-btn');
 const SHOW_ADD_BUDGET_MODAL_BTN = document.querySelector('.show-add-budget-modal-btn');
 const CLOSE_ADD_BUDGET_MODAL_BTN = document.querySelector('.close-budget-modal-btn');
-
+const DELETE_BUDGET_BTN = document.querySelector('.delete-budget-btn');
 
 //inputs 
 //entry controls form
@@ -102,6 +101,32 @@ ENTRIES_CONTAINER.addEventListener('click', (e) => {
     }
 });
 
+//handler to select a budget
+let idCurrentBudgetSelected = '';
+BUDGETS_CONTAINER.addEventListener('click', (e) => {
+    // Buscar el div más cercana al elemento clicado
+    const divSelected = e.target.closest('div');
+    if (!divSelected || !divSelected.hasAttribute('id')) {
+        return; // Si no es un div válida o no tiene `id`, salir
+    }
+    //obtener id
+    const idBudget = divSelected.getAttribute('id');
+    // si ya hay un id actual seleccionado no puede haber otro seleccionado
+    if (idCurrentBudgetSelected !== '' && idCurrentBudgetSelected !== idBudget) {
+        return;
+    } else if (idCurrentBudgetSelected !== '' && idCurrentBudgetSelected == idBudget) {
+        divSelected.classList.toggle("budgetSelected");
+        DELETE_BUDGET_BTN.disabled = true;
+        // UPDATE_ENTRY_BTN.disabled = true;
+        idCurrentBudgetSelected = '';
+    } else if (idCurrentRowSelected == '') {
+        idCurrentBudgetSelected = idBudget;
+        divSelected.classList.toggle("budgetSelected");
+        DELETE_BUDGET_BTN.disabled = false;
+    }
+});
+
+
 
 //BUDGET STUFF
 ADD_BUDGET_BTN.addEventListener('click', () => {
@@ -110,6 +135,17 @@ ADD_BUDGET_BTN.addEventListener('click', () => {
         initializeBudgets();
         loadBudgetOptions();
     });
+})
+
+DELETE_BUDGET_BTN.addEventListener('click', () => {
+    //sends to db
+    deleteBudget(idCurrentBudgetSelected).then(() => {
+        //update state and UI
+        initializeBudgets();
+    });
+    // UPDATE_ENTRY_BTN.disabled = true;
+    DELETE_BUDGET_BTN.disabled = true;
+    idCurrentBudgetSelected = '';
 })
 
 
@@ -130,19 +166,19 @@ loadBudgetOptions();
 
 function getDataNewBudget() {
     //first get current input data
-    let tempNAME_ENTRY_TXT = NAME_BUDGET_TXT.value;
-    let tempAMT_ENTRY_TXT = AMT_ENTRY_TXT.value;
+    let tempNAME_BUDGET_TXT = NAME_BUDGET_TXT.value;
+    let tempAMT_BUDGET_TXT = AMT_BUDGET_TXT.value;
     // console.log(tempDATE_ENTRY_TXT);
-    if (tempNAME_ENTRY_TXT == '') {
-        tempNAME_ENTRY_TXT = 'A budget';
+    if (tempNAME_BUDGET_TXT == '') {
+        tempNAME_BUDGET_TXT = 'Budget';
     }
-    if (tempAMT_ENTRY_TXT == '') {
-        tempAMT_ENTRY_TXT = '100';
+    if (tempAMT_BUDGET_TXT == '') {
+        tempAMT_BUDGET_TXT = '0';
     }
 
     const newBudget = new Budget(
-        tempNAME_ENTRY_TXT,
-        tempAMT_ENTRY_TXT
+        tempNAME_BUDGET_TXT,
+        tempAMT_BUDGET_TXT
     );
 
     return newBudget;
@@ -353,7 +389,7 @@ function initializeBudgets() {
         })
         //update ui with data obtanied
         renderBudgets();
-        console.log(BUDGETS);
+        // console.log(BUDGETS);s
     });
 }
 
@@ -364,14 +400,18 @@ function renderBudgets() {
     for (let budget of BUDGETS) {
         let template = document.querySelector(".budget-template");
         let content = template.content.cloneNode(true);
+        let divContainerBudget = content.querySelector('.budget-container');
+        divContainerBudget.id = budget.id;
+        // console.log(budget.id);
+        
         content.querySelector('.name-budget').innerHTML = budget.name;
-        content.querySelector('.amt-budget').innerHTML = budget.amount;
+        content.querySelector('.amt-budget').innerHTML = 'L. ' + budget.amount;
         //budget graphics
-        let budgetGraphic = content.querySelector('.budget-graphic');
-        let ctx = budgetGraphic.getContext('2d');
-        ctx.beginPath();
-        ctx.arc(x, y, 50, 0, Math.PI * 2);
-        ctx.fill();
+        // let budgetGraphic = content.querySelector('.budget-graphic');
+        // let ctx = budgetGraphic.getContext('2d');
+        // ctx.beginPath();
+        // ctx.arc(x, y, 50, 0, Math.PI * 2);
+        // ctx.fill();
         BUDGETS_CONTAINER.append(content);
 
         
@@ -379,7 +419,7 @@ function renderBudgets() {
     }
 }
 
-
+//data modeling classes
 class Entry {
     constructor(date, description, amount, type, category) {
         this.date = date;
@@ -395,7 +435,6 @@ class Budget {
         this.name = name;
         this.amount = amount
     }
-
 }
 
 initializeEntries();

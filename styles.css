@@ -159,7 +159,7 @@ margin-bottom: 0;
     display: none;
 }
 
-.rowSelected {
+.rowSelected, .budgetSelected {
     transition: all 0.5s;
     background-color: rgb(255, 255, 155);
 }
@@ -167,7 +167,6 @@ margin-bottom: 0;
 /*BUDGET CONTAINER*/
 .budgets-container {
     margin-top: 2rem;
-    border: red thin solid;
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
@@ -176,6 +175,11 @@ margin-bottom: 0;
 
 .budget-container {
     border: gray thin solid;
+    border-radius: 20px;
+    /* border: gray thin solid; */
     width: 10rem;
-    
+    text-align: center;
+}
+.budget-container:hover {
+    cursor: pointer;
 }
