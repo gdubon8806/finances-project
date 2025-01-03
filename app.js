@@ -20,11 +20,13 @@ const DESC_ENTRY_TXT = document.querySelector('.desc-entry-txt');
 const AMT_ENTRY_TXT = document.querySelector('.amt-entry-txt');
 const TYPE_ENTRY_SELECT = document.querySelector('.type-entry-select');
 const CAT_ENTRY_SELECT = document.querySelector('.cat-entry-select');
+const CAT_ENTRY_LABEL = document.querySelector('.cat-entry-label');
 
 //budget controls form
-const NAME_BUDGET_TXT = document.querySelector('.budget-name-txt');
-const AMT_BUDGET_TXT = document.querySelector('.budget-amt-txt');
-
+const NAME_BUDGET_TXT_ELEMENT = document.querySelector('.budget-name-txt');
+const AMT_BUDGET_TXT_ELEMENT = document.querySelector('.budget-amt-txt');
+const YEAR_BUDGET_TXT_ELEMENT = document.querySelector('.budget-year-txt');
+const MONTH_BUDGET_SELECT_ELEMENT = document.querySelector('.budget-month-select');
 
 
 //UI elements
@@ -42,7 +44,7 @@ let initialFunds = 1000.00;
 let currentFunds = initialFunds;
 
 //event listeners
-//add entry
+//add entry in DB
 ADD_ENTRY_BTN.addEventListener('click', () => {
     //send data to DB 
     createEntry(getDataNewEntry()).then(() => {
@@ -50,17 +52,6 @@ ADD_ENTRY_BTN.addEventListener('click', () => {
         initializeEntries();
     });
 })
-
-//update entry // para despues
-// UPDATE_ENTRY_BTN.addEventListener('click', () => {
-//show addData modal populated with the current data of the selected entry
-// updateEntry(idCurrentRowSelected, ).then(() => {
-//     initializeEntries();
-// });
-// UPDATE_ENTRY_BTN.disabled = true;
-// DELETE_ENTRY_BTN.disabled = true;
-// idCurrentRowSelected = '';
-// })
 
 //delete entry
 DELETE_ENTRY_BTN.addEventListener('click', () => {
@@ -128,7 +119,9 @@ BUDGETS_CONTAINER.addEventListener('click', (e) => {
 
 
 
-//BUDGET STUFF
+//Budget functions and handlers
+
+//create budget to DB
 ADD_BUDGET_BTN.addEventListener('click', () => {
     createBudget(getDataNewBudget()).then(() => {
         //update state and UI   
@@ -165,20 +158,29 @@ function loadBudgetOptions() {
 loadBudgetOptions();
 
 function getDataNewBudget() {
-    //first get current input data
-    let tempNAME_BUDGET_TXT = NAME_BUDGET_TXT.value;
-    let tempAMT_BUDGET_TXT = AMT_BUDGET_TXT.value;
-    // console.log(tempDATE_ENTRY_TXT);
-    if (tempNAME_BUDGET_TXT == '') {
-        tempNAME_BUDGET_TXT = 'Budget';
+
+    let nameBudgetTxtValue = NAME_BUDGET_TXT_ELEMENT.value;
+    let amtBudgetTxtValue = AMT_BUDGET_TXT_ELEMENT.value;
+    let yearBudgetTxtValue = YEAR_BUDGET_TXT_ELEMENT.value.trim();
+    let monthBudgetSelectValue = MONTH_BUDGET_SELECT_ELEMENT.value;
+
+    if (nameBudgetTxtValue == '') {
+        nameBudgetTxtValue = 'Presupuesto sin nombre';
     }
-    if (tempAMT_BUDGET_TXT == '') {
-        tempAMT_BUDGET_TXT = '0';
+    if (amtBudgetTxtValue == '') {
+        amtBudgetTxtValue = '0';
     }
 
+    if (yearBudgetTxtValue == '') {
+        yearBudgetTxtValue = new Date().getFullYear().toString();
+    }
+
+
     const newBudget = new Budget(
-        tempNAME_BUDGET_TXT,
-        tempAMT_BUDGET_TXT
+        nameBudgetTxtValue,
+        amtBudgetTxtValue,
+        yearBudgetTxtValue,
+        monthBudgetSelectValue
     );
 
     return newBudget;
@@ -208,21 +210,32 @@ function toggleModalEntry() {
     ADD_ENTRY_MODAL_CONTAINER.classList.toggle('hide');
 }
 
+
+//handler que detecte cuando se selecciona un deposito o retiro. 
+TYPE_ENTRY_SELECT.addEventListener('change', () => {
+    if (TYPE_ENTRY_SELECT.value == 'Deposit') {
+        CAT_ENTRY_LABEL.style.display = 'none';
+        CAT_ENTRY_SELECT.style.display = 'none';
+    } else {
+        CAT_ENTRY_SELECT.style.display = 'block';
+        CAT_ENTRY_LABEL.style.display = 'block';
+    }
+})
+
 function getDataNewEntry() {
     //first get current input data
-
     let tempDATE_ENTRY_TXT = DATE_ENTRY_TXT.value;
-    // console.log(tempDATE_ENTRY_TXT);
     if (tempDATE_ENTRY_TXT == '') {
         tempDATE_ENTRY_TXT = new Date();
         tempDATE_ENTRY_TXT = tempDATE_ENTRY_TXT.toISOString().split('T')[0];
-        console.log(tempDATE_ENTRY_TXT);
     }
-    console.log(tempDATE_ENTRY_TXT);
     let tempDESC_ENTRY_TXT = DESC_ENTRY_TXT.value;
     let tempAMT_ENTRY_TXT = AMT_ENTRY_TXT.value;
     let tempTYPE_ENTRY_SELECT = TYPE_ENTRY_SELECT.value;
-    let tempCAT_ENTRY_SELECT = CAT_ENTRY_SELECT.value;
+    let tempCAT_ENTRY_SELECT = 'N/A'
+    if (TYPE_ENTRY_SELECT.value == 'Withdrawal') {
+        tempCAT_ENTRY_SELECT = CAT_ENTRY_SELECT.value;
+    }
 
     const newEntry = new Entry(
         tempDATE_ENTRY_TXT,
@@ -402,10 +415,11 @@ function renderBudgets() {
         let content = template.content.cloneNode(true);
         let divContainerBudget = content.querySelector('.budget-container');
         divContainerBudget.id = budget.id;
-        // console.log(budget.id);
-        
+
         content.querySelector('.name-budget').innerHTML = budget.name;
         content.querySelector('.amt-budget').innerHTML = 'L. ' + budget.amount;
+        content.querySelector('.year-budget').innerHTML = 'Año: ' + budget.year;
+        content.querySelector('.month-budget').innerHTML = 'Mes: ' + budget.month
         //budget graphics
         // let budgetGraphic = content.querySelector('.budget-graphic');
         // let ctx = budgetGraphic.getContext('2d');
@@ -413,9 +427,6 @@ function renderBudgets() {
         // ctx.arc(x, y, 50, 0, Math.PI * 2);
         // ctx.fill();
         BUDGETS_CONTAINER.append(content);
-
-        
-        
     }
 }
 
@@ -431,9 +442,11 @@ class Entry {
 }
 
 class Budget {
-    constructor(name, amount) {
+    constructor(name, amount, year, month) {
         this.name = name;
         this.amount = amount
+        this.year = year;
+        this.month = month
     }
 }
 

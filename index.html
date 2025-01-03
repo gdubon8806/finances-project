@@ -38,9 +38,9 @@
                 <label for="amt-entry-txt">Tipo:</label>
                 <select class="type-entry-select" name="type-entry-select">
                     <option value="Deposit">Depósito</option>
-                    <option value="Withdrawal">Retiro</option>
+                    <option value="Withdrawal" selected>Retiro</option>
                 </select>
-                <label for="cat-entry-select">Categoría:</label>
+                <label class="cat-entry-label" for="cat-entry-select">Categoría:</label>
                 <select class="cat-entry-select" name="cat-entry-select">
                 </select>
                 <div>
@@ -59,13 +59,29 @@
             <div class="flex add-budget-controls">
                 <label for="budget-name-txt">Nombre:</label>
                 <input type="text" name="budget-name-txt" class="budget-name-txt" placeholder="Nombre..." required>
+                
                 <label for="budget-amt-txt">Cantidad:</label>
                 <input type="number" name="budget-amt-txt" class="budget-amt-txt" placeholder="Cantidad..." required>
-                <!-- <label for="amt-entry-txt">Tipo:</label>
-                <select class="type-entry-select" name="type-entry-select">
-                    <option value="Deposit">Depósito</option>
-                    <option value="Withdrawal">Retiro</option>
-                </select> -->
+                
+                <label for="budget-year-txt">Año:</label>
+                <input type="text" name="budget-year-txt" class="budget-year-txt" placeholder="Año...">
+                
+                <label for="budget-month-select">Mes:</label>
+                <select class="budget-month-select" name="budget-month-select">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+                
                 <div>
                     <button class="add-budget-btn">Agregar</button>
                     <button class="close-budget-modal-btn">Cerrar</button>
@@ -116,6 +132,8 @@
         <div class="budget-container">
             <h2 class="name-budget"></h2>
             <h3 class="amt-budget"></h3>
+            <h4 class="year-budget"></h4>
+            <h4 class="month-budget"></h4>
             <!-- <canvas class="budget-graphic"></canvas> -->
         </div>
     </template>

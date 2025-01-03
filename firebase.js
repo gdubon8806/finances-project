@@ -86,6 +86,8 @@ export async function readBudget() {
             id: doc.id,
             name: doc.data().name,
             amount: doc.data().amount,
+            year: doc.data().year,
+            month: doc.data().month
         }
         budgets.push(budget);
     })
@@ -98,6 +100,8 @@ export async function createBudget(data) {
         const docRef = await addDoc(collection(db, "budgets"), {
           name: data.name,
           amount: data.amount,
+          year: data.year,
+          month: data.month
         });
         console.log("Budget written with ID: ", docRef.id);
       } catch (e) {
