@@ -248,7 +248,7 @@ function getDataNewEntry() {
     return newEntry;
 }
 
-function initializeEntries() {
+async function initializeEntries() {
     //get data
     ENTRIES = []; //restarts entries state arr
     readEntry().then((entries) => {
@@ -257,6 +257,7 @@ function initializeEntries() {
         })
         //update ui with data obtanied
         renderTableEntries();
+        renderBudgets();
     });
 
     currentFunds = initialFunds;
@@ -394,7 +395,7 @@ function renderTableEntries() {
 }
 
 
-function initializeBudgets() {
+async function initializeBudgets() {
     BUDGETS = []; //restarts BUDGETS state arr
     readBudget().then((budgets) => {
         budgets.forEach((budget) => {
@@ -402,7 +403,7 @@ function initializeBudgets() {
         })
         //update ui with data obtanied
         renderBudgets();
-        // console.log(BUDGETS);s
+        // console.log(BUDGETS);
     });
 }
 
@@ -420,6 +421,38 @@ function renderBudgets() {
         content.querySelector('.amt-budget').innerHTML = 'L. ' + budget.amount;
         content.querySelector('.year-budget').innerHTML = 'Año: ' + budget.year;
         content.querySelector('.month-budget').innerHTML = 'Mes: ' + budget.month
+
+        //to compute remaining amt current budget
+        //initially its the budget.amount.
+        let remainingAmtBudget = parseFloat(budget.amount);
+
+        //fetch all entries that has the category of the budget and year and month
+        // console.log("Id de budget actual: " + budget.id);
+        let matchedEntries = ENTRIES.filter((entry) => {
+            // console.log("Entry categoria id: " + entry.category);
+            if(entry.category  == budget.id) {
+                let dateToExtract = entry.date;
+                let parts = dateToExtract.split("-");
+                let entryYear = parts[0];
+                let entryMonth = parts[1];
+
+                if((entryYear == budget.year) && (entryMonth == budget.month)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        });
+        let acum = 0;
+        matchedEntries.forEach((entry) => {
+             acum += parseFloat(entry.amount);
+        })
+        remainingAmtBudget -= acum;
+        content.querySelector('.remaining-amt-budget').innerHTML = "Restante: L. " + remainingAmtBudget;
+
+
         //budget graphics
         // let budgetGraphic = content.querySelector('.budget-graphic');
         // let ctx = budgetGraphic.getContext('2d');
@@ -450,7 +483,12 @@ class Budget {
     }
 }
 
-initializeEntries();
-initializeBudgets();
+function main() {
+    initializeEntries().then(() => {
+        initializeBudgets();
+    });
+}
+
+main();
 
 
