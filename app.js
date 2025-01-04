@@ -40,7 +40,7 @@ const BUDGETS_CONTAINER = document.querySelector('.budgets-container');
 let ENTRIES = [];
 let BUDGETS = [];
 // let totalFunds, totalSpendings, totalEarnings, shouldHave, difference;
-let initialFunds = 1000.00;
+let initialFunds = 0;
 let currentFunds = initialFunds;
 
 //event listeners
