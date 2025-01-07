@@ -312,8 +312,8 @@ function renderTableEntries() {
                 tableDataDesc.innerHTML = spendingsDateEntries[i].description;
                 tableDataAmt.innerHTML = 'L. ' + spendingsDateEntries[i].amount;
 
-                tableDataAmt.style.minWidth = "150px";
-                tableDataDesc.style.paddingLeft = '0px';
+                // tableDataAmt.style.minWidth = "150px";
+                // tableDataDesc.style.paddingLeft = '0px';
 
                 rowEntry.appendChild(tableDataDesc);
                 rowEntry.appendChild(tableDataAmt);
@@ -326,7 +326,9 @@ function renderTableEntries() {
         } else {
             let rowEntry = document.createElement('tr');
             let tableDataEntry = document.createElement('td');
+            tableDataEntry.classList.add("no-entries-td");
             tableDataEntry.innerHTML = "No hay entradas.";
+            
             rowEntry.append(tableDataEntry);
             content.querySelector(".spending-table-entries").append(rowEntry);
         }
@@ -348,6 +350,9 @@ function renderTableEntries() {
                 tableDataDesc.innerHTML = depositsDateEntries[i].description;
                 tableDataAmt.innerHTML = 'L. ' + depositsDateEntries[i].amount;
 
+                // tableDataAmt.style.minWidth = "150px";
+                // tableDataDesc.style.paddingLeft = '0px';
+                
                 rowEntry.appendChild(tableDataDesc);
                 rowEntry.appendChild(tableDataAmt);
 
@@ -357,8 +362,9 @@ function renderTableEntries() {
         } else {
             let rowEntry = document.createElement('tr');
             let tableDataEntry = document.createElement('td');
+            tableDataEntry.classList.add("no-entries-td");
             tableDataEntry.innerHTML = "No hay entradas.";
-            rowEntry.style.textAlign = "center";
+            
             rowEntry.append(tableDataEntry);
             content.querySelector(".income-table-entries").append(rowEntry);
         }
@@ -417,15 +423,32 @@ function renderBudgets() {
         let divContainerBudget = content.querySelector('.budget-container');
         divContainerBudget.id = budget.id;
 
+        let months = {
+            "01": "Enero",
+            "02": "Febrero",
+            "03": "Marzo",
+            "04": "Abril",
+            "05": "Mayo",
+            "06": "Junio",
+            "07": "Julio",
+            "08": "Agosto",
+            "09": "Septiembre",
+            "10": "Octubre",
+            "11": "Noviembre",
+            "12": "Diciembre"
+        }
+        //console.log(budget.month)
+
         content.querySelector('.name-budget').innerHTML = budget.name;
-        content.querySelector('.amt-budget').innerHTML = 'L. ' + budget.amount;
-        content.querySelector('.year-budget').innerHTML = 'Año: ' + budget.year;
-        content.querySelector('.month-budget').innerHTML = 'Mes: ' + budget.month
+        content.querySelector('.amt-budget').innerHTML = 'Monto original: L. ' + budget.amount;
+        // content.querySelector('.year-budget').innerHTML = 'Año: ' + budget.year;
+        // content.querySelector('.month-budget').innerHTML = 'Mes: ' + budget.month
+        content.querySelector('.period-budget').innerHTML = "Período: " +  months[budget.month] + " de "+ budget.year;
 
         //to compute remaining amt current budget
         //initially its the budget.amount.
         let remainingAmtBudget = parseFloat(budget.amount);
-
+        
         //fetch all entries that has the category of the budget and year and month
         // console.log("Id de budget actual: " + budget.id);
         let matchedEntries = ENTRIES.filter((entry) => {
@@ -447,7 +470,9 @@ function renderBudgets() {
         });
         let acum = 0;
         matchedEntries.forEach((entry) => {
-             acum += parseFloat(entry.amount);
+            console.log(entry); 
+            acum += parseFloat(entry.amount);
+             
         })
         remainingAmtBudget -= acum;
         content.querySelector('.remaining-amt-budget').innerHTML = "Restante: L. " + remainingAmtBudget;

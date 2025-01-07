@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:wght@100&display=swap');
+
 /*GLOBALS*/
 * {
     box-sizing: border-box;
@@ -17,11 +18,13 @@ input {
     padding: 0.25rem;
 
 }
+
 button {
     margin: 0.25rem;
 }
 
-button:hover, tr:hover {
+button:hover,
+tr:hover {
     cursor: pointer;
 }
 
@@ -34,7 +37,9 @@ select {
 
 /*RESPONSIVENESS*/
 @media (max-width: 1200px) {
-    input, select {
+
+    input,
+    select {
         padding: 0.25rem;
         border-radius: 0.25rem;
         font-size: 1rem;
@@ -43,6 +48,7 @@ select {
     .add-entry-modal {
         width: 100%;
     }
+
     .add-entry-modal-container {
         padding: 0;
     }
@@ -51,6 +57,7 @@ select {
         font-size: 1rem;
     }
 }
+
 /*Header*/
 header {
     padding: 0.5rem;
@@ -61,8 +68,15 @@ header {
     background-color: white;
     /* backdrop-filter: blur(10px); */
 }
+
 header h1 {
     margin: 0px auto;
+}
+
+.header-options-container {
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
 }
 
 /*BUTTONS*/
@@ -71,10 +85,11 @@ button {
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     color: black;
+    min-width: 200px;
 }
 
 /*MODALS*/
-.add-entry-modal-container, 
+.add-entry-modal-container,
 .add-budget-modal-container {
     position: absolute;
     top: 0;
@@ -89,10 +104,15 @@ button {
     background-color: rgba(0, 0, 0, 0.528);
 }
 
+.year-budget {
+    border: red thin solid;
+}
 
-.add-entry-modal, .add-budget-modal {
+
+.add-entry-modal,
+.add-budget-modal {
     margin-top: 1rem;
-    width:  100%;
+    width: 100%;
     font-size: 1.2em;
     padding: 1rem;
     background-color: white;
@@ -101,7 +121,8 @@ button {
 }
 
 /*ADD ENTRY STUFF*/
-.add-entry-controls > *, .add-budget-controls > * {
+.add-entry-controls>*,
+.add-budget-controls>* {
     margin-top: 0.5rem
 }
 
@@ -111,55 +132,82 @@ button {
     border-collapse: collapse;
     text-wrap: wrap;
 }
+
 .table-entries th {
     /* color: rgb(64, 64, 64); */
     background-color: var(--bck-color-primary);
 }
+
 .table-entries td {
-    /*background-color:  rgb(250, 250, 250) ; */
+    /* background-color:  rgb(250, 250, 250) ; */
     /* border: gray thin solid; */
     padding: 0.5rem;
     border: none;
-    border-bottom: gray thin solid;
+    border-bottom: lightgrey thin solid;
+    color: gray;
 }
 
-.table-entries tr {
-    /* border: none; */
+.table-entries th:first-child,
+.table-entries td:first-child {
+    width: 70vw;
+    /* Ancho específico para la primera columna */
+}
+
+.no-entries-td {
+    text-align: center;
+    color: gray;
 }
 
 /*Summary of date template*/
 .summary-date-table {
     width: 100%;
     border-collapse: collapse;
+    color: gray;
 }
+
 .summary-date-table td {
     /*background-color:  rgb(250, 250, 250) ; */
     border: gray thin solid;
+
 }
 
 /*DAY TEMPLATE*/
 .header-s {
     margin: 0;
+    margin-top: 0.5rem;
 }
+
+summary.header-s {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    /* color: gray; */
+    font-weight: bold;
+}
+
 .header-i {
     margin: 0;
+    margin-top: 0.5rem;
 }
-.date-header  {
-/* margin-top: 1.5rem; */
-margin-bottom: 0;
+
+.date-header {
+    /* margin-top: 1.5rem; */
+    margin-bottom: 0;
+    /* color: gray; */
 }
 
 
-/*CLASSES UTILS*/ 
+/*CLASSES UTILS*/
 .flex {
     display: grid;
     grid-template-columns: 2;
 }
+
 .hide {
     display: none;
 }
 
-.rowSelected, .budgetSelected {
+.rowSelected,
+.budgetSelected {
     transition: all 0.5s;
     background-color: rgb(255, 255, 155);
 }
@@ -177,9 +225,10 @@ margin-bottom: 0;
     border: gray thin solid;
     border-radius: 20px;
     /* border: gray thin solid; */
-    width: 10rem;
+    width: 15rem;
     text-align: center;
 }
+
 .budget-container:hover {
     cursor: pointer;
 }

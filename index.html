@@ -13,12 +13,13 @@
 
 <body>
     <header>
-        <h1>My finances</h1>
-        <button class="show-add-entry-modal-btn">+ Agregar Entrada</button>
-        <button class="delete-entry-btn" disabled>- Eliminar Entrada</button>
-        <button class="show-add-budget-modal-btn">+ Agregar presupuesto</button>
-        <button class="delete-budget-btn" disabled>- Eliminar presupuesto</button>
-    
+        <h1>Mis finanzas</h1>
+        <div class="header-options-container">
+            <button class="show-add-entry-modal-btn">+ Agregar Entrada</button>
+            <button class="delete-entry-btn" disabled>- Eliminar Entrada</button>
+            <button class="show-add-budget-modal-btn">+ Agregar presupuesto</button>
+            <button class="delete-budget-btn" disabled>- Eliminar presupuesto</button>
+        </div>
     </header>
 
     <!-- <button class="update-entry-btn" disabled >Actualizar Entrada</button>  -->
@@ -59,13 +60,13 @@
             <div class="flex add-budget-controls">
                 <label for="budget-name-txt">Nombre:</label>
                 <input type="text" name="budget-name-txt" class="budget-name-txt" placeholder="Nombre..." required>
-                
+
                 <label for="budget-amt-txt">Cantidad:</label>
                 <input type="number" name="budget-amt-txt" class="budget-amt-txt" placeholder="Cantidad..." required>
-                
+
                 <label for="budget-year-txt">Año:</label>
                 <input type="text" name="budget-year-txt" class="budget-year-txt" placeholder="Año...">
-                
+
                 <label for="budget-month-select">Mes:</label>
                 <select class="budget-month-select" name="budget-month-select">
                     <option value="01">Enero</option>
@@ -81,7 +82,7 @@
                     <option value="11">Noviembre</option>
                     <option value="12">Diciembre</option>
                 </select>
-                
+
                 <div>
                     <button class="add-budget-btn">Agregar</button>
                     <button class="close-budget-modal-btn">Cerrar</button>
@@ -109,36 +110,38 @@
     </template>
 
     <template class="summary-date-template">
-        <h3 class="header-s">Resumen de fecha</h3>
-        <table class="summary-date-table">
-            <tr>
-                <th class="current-total-funds-spendings"></th>
-                <th>-</th>
-                <th class="total-spendings"></th>
-                <th>=</th>
-                <th class="new-total-funds-after-spendings"></th>
-            </tr>
-            <tr>
-                <th class="current-total-funds-income"></th>
-                <th>+</th>
-                <th class="total-income"></th>
-                <th>=</th>
-                <th class="new-total-funds-after-income"></th>
-            </tr>
-        </table>
+        <details>
+            <summary class="header-s">Resumen de fecha</summary>
+            <table class="summary-date-table">
+                <tr>
+                    <th class="current-total-funds-spendings"></th>
+                    <th>-</th>
+                    <th class="total-spendings"></th>
+                    <th>=</th>
+                    <th class="new-total-funds-after-spendings"></th>
+                </tr>
+                <tr>
+                    <th class="current-total-funds-income"></th>
+                    <th>+</th>
+                    <th class="total-income"></th>
+                    <th>=</th>
+                    <th class="new-total-funds-after-income"></th>
+                </tr>
+            </table>
+        </details>
     </template>
 
     <template class="budget-template">
         <div class="budget-container">
             <h2 class="name-budget"></h2>
-            <h3 class="amt-budget"></h3>
-            <h4 class="year-budget"></h4>
-            <h4 class="month-budget"></h4>
-            <h4 class="remaining-amt-budget"></h4>
+            <h3 class="remaining-amt-budget"></h3>
+            <p class="amt-budget"></p>
+            <!-- <h4 class="year-budget"></h4> -->
+            <!-- <h4 class="month-budget"></h4> -->
+            <p class="period-budget"></p>
             <!-- <canvas class="budget-graphic"></canvas> -->
         </div>
     </template>
-
 
     <script type="module" src="app.js" defer></script>
 </body>
